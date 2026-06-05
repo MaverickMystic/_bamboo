@@ -1,92 +1,138 @@
-import { Calendar, User, Tag, ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Youtube from "@tiptap/extension-youtube";
+import { ImageResize } from "../utils/imageResize";
+import { CalendarDays, BookOpen, Leaf } from "lucide-react";
+import { useParams } from "react-router";
 
 export default function PostDetail() {
-  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [post, setPost] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+       if (!id) {
+      setError("Missing post id");
+      return;
+    }
+    const loadPost = async () => {
+      try {
+         const res = await axios.get(`http://localhost:3000/posts/${id}`);
+        setPost(res.data.post);
+      } catch (error) {
+           console.error(error);
+        setError("Could not load this post.");
+        setPost(null);
+      }
+    };
+
+    loadPost();
+  }, []);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Youtube,
+      ImageResize.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+    ],
+    content: post?.document || "<p></p>",
+    editable: false,
+    editorProps: {
+      attributes: {
+        class:
+          "ProseMirror prose prose-stone max-w-none focus:outline-none " +
+          "prose-headings:text-emerald-900 prose-p:text-stone-700 prose-strong:text-emerald-800 " +
+          "prose-blockquote:border-l-emerald-300 prose-blockquote:text-stone-600 " +
+          "prose-a:text-emerald-700 hover:prose-a:text-emerald-800 " +
+          "prose-img:rounded-lg prose-img:shadow-sm",
+      },
+    },
+    immediatelyRender: false,
+  });
+
+  useEffect(() => {
+    if (editor && post?.document) {
+      editor.commands.setContent(post.document);
+    }
+  }, [editor, post]);
+
+    if (!id) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-stone-50 via-emerald-50/20 to-stone-100 px-4 py-16 text-center text-stone-600">
+        Invalid link.
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-stone-50 via-emerald-50/20 to-stone-100 px-4 py-16 text-center text-red-700">
+        {error}
+      </div>
+    );
+  }
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-stone-50 to-emerald-50/30">
+        <div className="mx-auto max-w-4xl px-4 py-16">
+          <div className="animate-pulse rounded-2xl border border-emerald-100 bg-white/80 p-8 shadow-sm">
+            <div className="h-7 w-2/3 rounded bg-stone-200" />
+            <div className="mt-6 h-4 w-1/3 rounded bg-stone-200" />
+            <div className="mt-10 space-y-3">
+              <div className="h-4 w-full rounded bg-stone-100" />
+              <div className="h-4 w-11/12 rounded bg-stone-100" />
+              <div className="h-4 w-10/12 rounded bg-stone-100" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const created = post?.createdAt ? new Date(post.createdAt) : null;
 
   return (
-    <section className=" min-h-screen py-10 px-4 sm:px-8">
-      {/* Back Button */}
-      <div className="max-w-5xl mx-auto mb-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center cursor-pointer gap-2 text-sm text-gray-600 hover:text-pink-500 transition"
-        >
-          <ArrowLeft size={18} /> Back
-        </button>
-      </div>
-
-      {/* Post Banner */}
-      <div className="max-w-5xl mx-auto overflow-hidden rounded-2xl shadow-lg">
-        <img
-          src="https://i.pinimg.com/736x/04/ae/7a/04ae7a8d22d019754da7c761be385232.jpg"
-          alt="Post banner"
-          className="w-full h-72 md:h-96 object-cover"
-        />
-      </div>
-
-      <div className="max-w-5xl mx-auto mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
-          <div className="mb-4">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              自然にタッチ
-            </h1>
-            <div className="flex items-center text-sm text-gray-500 gap-4">
-              <span className="flex items-center gap-1">
-                <Calendar size={16} /> 2025-08-20
-              </span>
-              <span className="flex items-center gap-1">
-                <User size={16} /> Admin
-              </span>
-              <span className="flex items-center gap-1">
-                <Tag size={16} /> Nature
-              </span>
-            </div>
-          </div>
-
-          <article className="prose max-w-none text-gray-700 leading-relaxed">
-            <p>
-              自然の中で遊びながら感覚を磨き、身近にあるものにふれあう体験を大切にしています。
-              この投稿では、園の取り組みや活動内容について詳しくご紹介します。
-            </p>
-            <p>
-              山や川、公園など身近な自然を活用し、子どもたちが五感を使って学ぶ機会を提供しています。
-              こうした体験は成長に大きな影響を与え、思いやりや創造力を育てます。
-            </p>
-            <p>
-              今後も地域と連携しながら、多様な自然体験を提供し続けていきます。
-            </p>
-          </article>
+    <div className="min-h-screen bg-gradient-to-b from-stone-50 via-emerald-50/20 to-stone-100">
+      <div className="mx-auto max-w-4xl px-4 py-10 md:py-14">
+        {/* Top label */}
+        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+          <Leaf className="h-3.5 w-3.5" />
+          Bamboo Japanese Language School
         </div>
 
-        {/* Sidebar */}
-        <aside className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h3 className="text-lg font-semibold mb-3">Related Posts</h3>
-            <ul className="space-y-3 text-sm text-gray-700">
-              <li className="hover:text-pink-500 cursor-pointer">7つの特色</li>
-              <li className="hover:text-pink-500 cursor-pointer">牛深町のこと</li>
-              <li className="hover:text-pink-500 cursor-pointer">地域との連携活動</li>
-            </ul>
-          </div>
+        <article className="overflow-hidden rounded-2xl border border-emerald-100 bg-white/95 shadow-[0_12px_40px_rgba(16,24,40,0.08)] backdrop-blur">
+          {/* Header */}
+          <header className="border-b border-emerald-100 bg-gradient-to-r from-emerald-50/70 to-stone-50 px-6 py-6 md:px-10 md:py-8">
+            <h1 className="text-2xl font-semibold tracking-tight text-stone-900 md:text-3xl">
+              {post.title}
+            </h1>
 
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h3 className="text-lg font-semibold mb-3">Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 text-xs bg-pink-100 text-pink-700 rounded-full">
-                Nature
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-stone-600">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-stone-200">
+                <BookOpen className="h-4 w-4 text-emerald-700" />
+                Japanese Learning Article
               </span>
-              <span className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
-                Culture
-              </span>
-              <span className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full">
-                Community
-              </span>
+
+              {created && (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 ring-1 ring-stone-200">
+                  <CalendarDays className="h-4 w-4 text-emerald-700" />
+                  {created.toLocaleDateString()}
+                </span>
+              )}
             </div>
-          </div>
-        </aside>
+          </header>
+
+          {/* Content */}
+          <section className="px-6 py-7 md:px-10 md:py-10">
+            <div className="mx-auto max-w-3xl">
+              {editor ? <EditorContent editor={editor} /> : null}
+            </div>
+          </section>
+        </article>
       </div>
-    </section>
+    </div>
   );
 }

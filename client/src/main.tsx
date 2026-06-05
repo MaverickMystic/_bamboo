@@ -16,63 +16,89 @@ import Blog from "./pages/Blog";
 import Detail from "./pages/Detail";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import PostEditor from "./pages/admin/PostEditor";
+import  AdminLayout from "./Layouts/adminLayout";
+import BlogManagement from "./pages/admin/BlogManagement";
+import CategoryAdmin from "./pages/admin/Category";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./components/AuthContext";
+import ErrorPage from "./pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Main />,
+    element: <AuthProvider><Main /></AuthProvider>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
-        path: "home",
-        element: <Home />,
+        element: <Home/>,
       },
+    
       {
         path: "/login",
         element: <Login />,
       },
       {
-        path: "/dashboard",
+        path: "dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/about/speech",
+        path: "about/speech",
         element: <Speech />,
       },
       {
-        path: "/about/schooloverview",
+        path: "about/schooloverview",
         element: <About />,
       },
       {
-        path: "/school",
+        path: "school",
         element: <School />,
       },
       {
-        path: "/course",
+        path: "course",
         element: <Course />,
       },
       {
-        path: "/map",
+        path: "map",
         element: <Map />,
       },
       {
-        path: "/agency",
+        path: "agency",
         element: <Agency />,
       },
       {
-        path: "/about/inquiry",
+        path: "about/inquiry",
         element: <Inquiry />,
       },
       {
-        path: "/blog",
+        path: "blog",
         element: <Blog/>,
       },
       {
-        path: "/blog/detail",
+        path: "blog/detail/:id",
         element: <Detail/>,
-      },
+      }
     ],
   },
+  {
+    path:"/admin",
+    element:<AuthProvider><ProtectedRoute ><AdminLayout/></ProtectedRoute></AuthProvider>,
+    errorElement: <ErrorPage />,
+    children:[
+      {
+        index:true,
+        element:<PostEditor/>
+      },{
+        path:"blog_management",
+        element:<BlogManagement/>
+      },
+      {
+        path:"category",
+        element:<CategoryAdmin/>
+      }
+    ]
+  }
 ]);
 
 const queryClient = new QueryClient();

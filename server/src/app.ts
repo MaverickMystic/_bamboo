@@ -1,29 +1,32 @@
-import express, { json } from "express"
-import dotenv from "dotenv"
-import cors from "cors"
-import cookieParser from "cookie-parser"
-import { connectDB } from "./database/connectDB.ts"
-import userRoute from "./routes/user.ts"
+import dotenv from 'dotenv'
+dotenv.config();
+import express from 'express'
+import mongoose from 'mongoose'
+import router from './routes/authRoutes.ts';
+import cookieParser from 'cookie-parser';
 
-dotenv.config({
-    path: ".env"
-})
-
-const app = express();
+import cors from 'cors'
+const app=express();
+//update to env
 app.use(
-    cors({
-        origin: process.env.CLIENT_URL,
-        credentials: true
-    })
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
 )
+const PORT=3000;
 
-app.use(json())
 app.use(cookieParser())
-app.use(userRoute)
+app.use(express.json());
 
-const PORT = process.env.PORT || "8000";
+app.use('/',router);
 
-app.listen(PORT, ()=>{
-    connectDB()
-    console.log("Server is running: ",PORT);
-})
+const dbURI='mongodb://localhost:27017/bamboo';
+mongoose.connect(dbURI).then(()=>{
+    console.log("connected to mongodb");
+
+console.log("Connected DB name:", mongoose.connection.name);
+console.log("Connected host:", mongoose.connection.host);
+console.log("Ready state:", mongoose.connection.readyState);
+    app.listen(PORT,()=>console.log(`Server is running on port 3000`));
+}).catch((err) => console.error('MongoDB connection error:', err));

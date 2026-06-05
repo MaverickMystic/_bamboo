@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Add this line to load the Typography plugin in v4 */
+@plugin "@tailwindcss/typography"; 
+
 @theme {
     --color-beige: #f7e2d0;
     --color-sage: #a6cf8a;
@@ -11,4 +14,16 @@
     --color-black: #3B3B3B;
     --color-img: #7F8D73;
     --color-light: #515546;
+    --color-greengreen: "#188315"
+}
+/* Prevent horizontal overflow from large resized images */
+.ProseMirror {
+  overflow-x: hidden;
+  overflow-y:auto;
+}
+
+/* Clamp the actual image element */
+.ProseMirror img {
+  max-width: 100% !important;
+  height: auto !important;
 }
