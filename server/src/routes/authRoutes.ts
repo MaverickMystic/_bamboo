@@ -1,22 +1,22 @@
 import { Router } from "express";
-import { login, logout } from "../controller/loginController.ts";
-import authMiddleware from "../utils/authMiddleware.ts";
+import { login, logout } from "../controller/loginController.js";
+import authMiddleware from "../utils/authMiddleware.js";
 import type { AuthRequest } from "../utils/authMiddleware.ts";
 
-import { refresh } from "../controller/refreshController.ts";
+import { refresh } from "../controller/refreshController.js";
 import {
   createPost,
   deletePost,
   getAllPost,
   getPostById,
-} from "../controller/postController.ts";
+} from "../controller/postController.js";
 
 import {
   createCategory,
   deleteCategory,
   getCategories,
-} from "../controller/categoryController.ts";
-import { sendContactEmail } from "../controller/contactController.ts";
+} from "../controller/categoryController.js";
+import { sendContactEmail } from "../controller/contactController.js";
 
 const router = Router();
 
