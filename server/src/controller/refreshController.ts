@@ -1,6 +1,6 @@
 import type{ Request, Response } from "express";
 import jwt from 'jsonwebtoken'
-import user from "../models/user.ts";
+import user from "../models/user.js";
 export const refresh=async(req:Request,res:Response)=>{
   const refreshToken = req.cookies?.refreshToken;
 
@@ -31,8 +31,8 @@ export const refresh=async(req:Request,res:Response)=>{
 
 res.cookie("accessToken", newAccessToken, {
   httpOnly: true,
-  secure: false,
-  sameSite: "lax",
+  secure: true,
+  sameSite: "none",
   maxAge: 15 * 60 * 1000,
 });
 

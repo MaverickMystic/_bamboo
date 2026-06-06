@@ -63,8 +63,9 @@ export const extractCloudinaryPublicIds = (doc: any): string[] => {
   const walk = (node: any) => {
     if (!node) return;
 
-    if (  (node.type === "image" || node.type === "imageResize") && node.attrs?.src) {
-      const src: string = node.attrs.src;
+    if (  (node.type === "image" || node.type === "imageResize") && 
+      typeof node.attrs?.src === "string") {
+      const src:any= node.attrs.src;
      
       if (src.includes("res.cloudinary.com/dqbhf8bu0")) {
         const match = src.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/i);
