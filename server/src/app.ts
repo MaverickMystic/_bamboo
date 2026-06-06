@@ -32,5 +32,10 @@ if (!dbURI) {
 console.log("Connected DB name:", mongoose.connection.name);
 console.log("Connected host:", mongoose.connection.host);
 console.log("Ready state:", mongoose.connection.readyState);
-    app.listen(PORT,()=>console.log(`Server is running on port 3000`));
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Local dev server running on port ${PORT}`);
+  });
+}
 }).catch((err) => console.error('MongoDB connection error:', err));
