@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import asyncHandler from "../utils/asyncHandler.ts";
-import user from "../models/user.ts";
+import asyncHandler from "../utils/asyncHandler.js";
+import user from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 export const login = asyncHandler(async (req: Request, res: Response) => {

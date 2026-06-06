@@ -18,17 +18,17 @@ const Nav = () => {
 
   return (
     <>
-      <div className="mb-10 flex w-full justify-between md:justify-evenlyx">
+      <div className="fixed z-10  mb-10 flex w-full justify-between md:justify-evenlyx">
         <div className="flex flex-row items-center">
           <a
             href="/"
             className="text-greensage m-3 items-center justify-center rounded-full bg-white p-3 font-bold md:text-lg xl:text-2xl gap-1"
           >
-            B A M B OO
+            B A M B O O
           </a>
         </div>
 
-        <div className="m-3 hidden flex-row items-center gap-10 rounded-full bg-white p-3 px-10 md:flex md:visible">
+        <div className="m-3 hidden flex-row items-center gap-10 rounded-full bg-white p-3 px-5 md:flex md:visible">
           <NavLink to="/" end className={pill}>
             Home
           </NavLink>

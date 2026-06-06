@@ -1,6 +1,6 @@
 import express from "express";
 import nodemailer from "nodemailer";
-import { contactSchema } from "../schema/contact.schema.ts";
+import { contactSchema } from "../schema/contact.schema.js";
 
 
 export const sendContactEmail = async (req: express.Request, res: express.Response) => {

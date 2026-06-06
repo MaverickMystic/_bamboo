@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 import express from 'express'
 import mongoose from 'mongoose'
-import router from './routes/authRoutes.ts';
+import router from './routes/authRoutes.js';
 import cookieParser from 'cookie-parser';
 
 import cors from 'cors'
@@ -21,8 +21,12 @@ app.use(express.json());
 
 app.use('/',router);
 
-const dbURI='mongodb://localhost:27017/bamboo';
-mongoose.connect(dbURI).then(()=>{
+const dbURI=process.env.MONGODB_URI;
+if (!dbURI) {
+  console.error(" ERROR: MONGODB_URI is not defined in the environment variables!");
+  process.exit(1);
+}
+ await mongoose.connect(dbURI).then(()=>{
     console.log("connected to mongodb");
 
 console.log("Connected DB name:", mongoose.connection.name);

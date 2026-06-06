@@ -1,9 +1,9 @@
 import type{ Request, Response } from "express"
-import Post from "../models/post.ts"
-import { extractTextPreview, findFirstImage } from "../utils/helpers.ts"
-import Category from "../models/category.ts"
-import {getCloudinary} from "../utils/cloudinary.ts";
-import { extractCloudinaryPublicIds } from "../utils/helpers.ts";
+import Post from "../models/post.js"
+import { extractTextPreview, findFirstImage } from "../utils/helpers.js"
+import Category from "../models/category.js"
+import {getCloudinary} from "../utils/cloudinary.js";
+import { extractCloudinaryPublicIds } from "../utils/helpers.js";
 
 type CategoryType = { _id: string; name: string } | null;
 type PostType = {
