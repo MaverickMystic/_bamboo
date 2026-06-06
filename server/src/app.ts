@@ -7,6 +7,10 @@ import cookieParser from 'cookie-parser';
 
 import cors from 'cors'
 const app=express();
+const allowOrigins=[
+  "http://localhost:5173",
+  "https://bamboo-myanmar.com"
+]
 //update to env
 app.use(
   cors({
