@@ -39,3 +39,4 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 }).catch((err) => console.error('MongoDB connection error:', err));
+export default app;
