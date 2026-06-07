@@ -10,7 +10,7 @@ const app = express();
 
 const allowOrigins = [
   "http://localhost:5173",
-  "https://bamboo-frontend-beige.vercel.app/",
+  "https://bamboo-frontend-beige.vercel.app",
   "https://bamboo-myanmar.com"
 ];
 
